@@ -138,7 +138,7 @@ const checkupSchema = {
   "doctor_id": joi.string().required(),
   "user_id": joi.string().required(),
   "date": joi.string().required(),
-  "que_number": joi.integer().required()
+  "que_number": joi.number().integer().required()
 }
 
 
@@ -151,4 +151,6 @@ router.post('/checkup', function(req,res){
 .body(joi.object(checkupSchema).required(), 'tambahkan checkup baru')
 .response(joi.object().required(), 'checkup baru')
 .summary('data checkup')
-.description('data checkup');
+.description('data antrian');
+
+
