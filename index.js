@@ -52,7 +52,7 @@ const aql = require('@arangodb').aql;
 
 router.get('/doctors/:key/:value', function (req, res) {
   const keys = db._query(aql`
-  	FOR doctor IN quesystem_doctors
+  	FOR doctor IN doctors
     FILTER doctor.${req.pathParams.key} == ${req.pathParams.value}
   	SORT doctor.display_name
   	RETURN doctor
@@ -64,3 +64,22 @@ router.get('/doctors/:key/:value', function (req, res) {
 ).required(), 'List of entry keys.')
 .summary('List entry keys')
 .description('Assembles a list of keys of entries in the collection.');
+
+
+router.get('/checkup/:doctor_id/:date', function (req, res) {
+  const keys = db._query(aql`
+    FOR c IN checkup
+    FILTER c.doctor_id == ${req.pathParams.doctor_id} && c.date == ${req.pathParams.date}
+    COLLECT AGGREGATE  maxQue = MAX(c.que_number)
+    RETURN {
+       maxQue
+    }
+  `);
+  res.send(keys);
+})
+.response(joi.array().items(
+  joi.string().required()
+).required(), 'List of entry keys.')
+.summary('List entry keys')
+.description('Assembles a list of keys of entries in the collection.');
+
