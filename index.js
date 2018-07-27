@@ -84,6 +84,20 @@ router.get('/checkup/:doctor_id/:date', function (req, res) {
 .summary('List entry keys')
 .description('Assembles a list of keys of entries in the collection.');
 
+
+// status antrian
+router.get('/checkup_status/:doctor_id', function(req,res){
+  const keys = db._query(aql`
+    FOR entry IN ${checkupColl}
+    FILTER entry.doctor_id == ${req.pathParams.doctor_id}
+    RETURN entry
+  `);
+  res.send(keys);
+})
+.response(joi.array().items(joi.string().required()).required(), 'List of keys')
+.summary('Retrieve an entry')
+.description('Retrieves an entry from the "users" collection by key.');
+
 // list key user
 router.get('/listuser', function(req,res){
   const keys = db._query(aql`
