@@ -50,9 +50,9 @@ const DOC_NOT_FOUND = errors.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code;
 // continued
 const aql = require('@arangodb').aql;
 
-router.get('/doctors/:key/:value', function (req, res) {
+router.get('/doctors/:keynya/:valuenya', function (req, res) {
   const keys = db._query(aql`
-    FILTER doctor.${req.pathParams.key} == ${req.pathParams.value}
+    FILTER doctor.poly == 'pagi'
   	SORT doctor.display_name
   	RETURN doctor
   `);
