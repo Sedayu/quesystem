@@ -46,28 +46,20 @@ const errors = require('@arangodb').errors;
 const foxxColl = db._collection('quesystem_doctors');
 const DOC_NOT_FOUND = errors.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code;
 
-router.post('/doctors', function (req, res) {
-  const data = req.body;
-  const meta = foxxColl.save(req.body);
-  res.send(Object.assign(data, meta));
-})
-.body(joi.object().required(), 'Entry to store in the collection.')
-.response(joi.object().required(), 'Entry stored in the collection.')
-.summary('Store an entry')
-.description('Stores an entry in the "doctors" collection.');
 
-router.get('/doctors/:key', function (req, res) {
-  try {
-    const data = foxxColl.document(req.pathParams.key);
-    res.send(data)
-  } catch (e) {
-    if (!e.isArangoError || e.errorNum !== DOC_NOT_FOUND) {
-      throw e;
-    }
-    res.throw(404, 'The entry does not exist', e);
-  }
+// continued
+const aql = require('@arangodb').aql;
+
+router.get('/doctors/:key/:value', function (req, res) {
+  const keys = db._query(aql`
+    FILTER doctor.${req.pathParams.key} == ${req.pathParams.value}
+  	SORT doctor.display_name
+  	RETURN doctor
+  `);
+  res.send(keys);
 })
-.pathParam('key', joi.string().required(), 'Key of the entry.')
-.response(joi.object().required(), 'Entry stored in the collection.')
-.summary('Retrieve an entry')
-.description('Retrieves an entry from the "myFoxxCollection" collection by key.');
+.response(joi.array().items(
+  joi.string().required()
+).required(), 'List of entry keys.')
+.summary('List entry keys')
+.description('Assembles a list of keys of entries in the collection.');
