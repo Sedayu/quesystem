@@ -122,7 +122,7 @@ const docSchema = {
 
 router.post('/user', function(req,res){
   const data = req.body;
-  const meta = foxColl.save(req.body);
+  const meta = foxxColl.save(req.body);
   res.send(Object.assign(data, meta));
 
 })
