@@ -43,7 +43,7 @@ router.post('/sum', function (req, res) {
 // continued
 const db = require('@arangodb').db;
 const errors = require('@arangodb').errors;
-const foxxColl = db._collection('quesystem_doctors');
+const foxxColl = db._collection('users');
 const DOC_NOT_FOUND = errors.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code;
 
 
@@ -83,3 +83,14 @@ router.get('/checkup/:doctor_id/:date', function (req, res) {
 .summary('List entry keys')
 .description('Assembles a list of keys of entries in the collection.');
 
+// febri
+router get('/listuser', function(req,res){
+  const keys = db._query(aql`
+    FOR entry IN ${foxxColl}
+    RETURN entry._key
+  `);
+  res.send(keys);
+})
+.response(joi.array().items(joi.string().required()).required(), 'List of keys')
+.summary('Retrieve an entry')
+.description('Retrieves an entry from the "users" collection by key.');
