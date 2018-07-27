@@ -44,6 +44,7 @@ router.post('/sum', function (req, res) {
 const db = require('@arangodb').db;
 const errors = require('@arangodb').errors;
 const foxxColl = db._collection('users');
+const checkupColl = db._collection('checkup');
 const DOC_NOT_FOUND = errors.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code;
 
 
@@ -130,3 +131,24 @@ router.post('/user', function(req,res){
 .response(joi.object().required(), 'user baru')
 .summary('data diri')
 .description('data pasien');
+
+
+// post new checkup
+const checkupSchema = {
+  "doctor_id": joi.string().required(),
+  "user_id": joi.string().required(),
+  "date": joi.string().required(),
+  "que_number": joi.integer().required()
+}
+
+
+router.post('/checkup', function(req,res){
+  const data = req.body;
+  const meta = checkupColl.save(req.body);
+  res.send(Object.assign(data, meta));
+
+})
+.body(joi.object(checkupSchema).required(), 'tambahkan checkup baru')
+.response(joi.object().required(), 'checkup baru')
+.summary('data checkup')
+.description('data checkup');
