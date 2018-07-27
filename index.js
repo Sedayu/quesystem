@@ -43,7 +43,7 @@ router.post('/sum', function (req, res) {
 // continued
 const db = require('@arangodb').db;
 const errors = require('@arangodb').errors;
-const foxxColl = db._collection('doctors');
+const foxxColl = db._collection('quesystem_doctors');
 const DOC_NOT_FOUND = errors.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code;
 
 router.post('/doctors', function (req, res) {
