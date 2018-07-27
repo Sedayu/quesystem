@@ -84,7 +84,7 @@ router.get('/checkup/:doctor_id/:date', function (req, res) {
 .description('Assembles a list of keys of entries in the collection.');
 
 // febri
-router get('/listuser', function(req,res){
+router.get('/listuser', function(req,res){
   const keys = db._query(aql`
     FOR entry IN ${foxxColl}
     RETURN entry._key
