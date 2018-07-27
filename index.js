@@ -111,3 +111,22 @@ router.get('/user/:key', function(req,res){
 .response(joi.object().required(), 'Entry stored in the collection.')
 .summary('Retrieve an entry')
 .description('Retrieves an entry from the "users" collection by key.');
+
+
+// post new user
+const docSchema = {
+  "display_name": joi.string().required(),
+  "status": joi.string().required()
+}
+
+
+router.post('/user', function(req,res){
+  const data = req.body;
+  const meta = foxColl.save(req.body);
+  res send(Object.assign(data, meta));
+
+})
+.body(joi.object(docSchema).required(), 'tambahkan user baru')
+.response(joi.object().required(), 'user baru')
+.summary('data diri')
+.description('data pasien');
