@@ -138,6 +138,7 @@ const checkupSchema = {
   "doctor_id": joi.string().required(),
   "user_id": joi.string().required(),
   "date": joi.string().required(),
+  "status": joi.string().required(),
   "que_number": joi.number().integer().required()
 }
 
