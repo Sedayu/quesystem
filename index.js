@@ -83,7 +83,7 @@ router.get('/checkup/:doctor_id/:date', function (req, res) {
 .summary('List entry keys')
 .description('Assembles a list of keys of entries in the collection.');
 
-// febri
+// list key user
 router.get('/listuser', function(req,res){
   const keys = db._query(aql`
     FOR entry IN ${foxxColl}
@@ -92,5 +92,22 @@ router.get('/listuser', function(req,res){
   res.send(keys);
 })
 .response(joi.array().items(joi.string().required()).required(), 'List of keys')
+.summary('Retrieve an entry')
+.description('Retrieves an entry from the "users" collection by key.');
+
+// list user based on key
+router.get('/user/:key', function(req,res){
+  try {
+    const data = foxxColl.document(req.pathParams.key);
+    res.send(data)
+  } catch (e) {
+    if (!e.isArangoError || e.errorNum !== DOC_NOT_FOUND) {
+      throw e;
+    }
+    res.throw(404, 'The entry does not exist', e);
+  }
+})
+.pathParam('key', joi.string().required(), 'Key of the entry.')
+.response(joi.object().required(), 'Entry stored in the collection.')
 .summary('Retrieve an entry')
 .description('Retrieves an entry from the "users" collection by key.');
