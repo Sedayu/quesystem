@@ -169,3 +169,25 @@ router.post('/checkup', function(req,res){
 .description('data antrian');
 
 
+const updatecheckupSchema = {
+  "key": joi.string().required(),
+  "status": joi.string().required()
+}
+
+router.put('/update_status', function(req,res){
+  const data = req.body;
+  const keys = db._query(aql`
+    FOR c IN checkup
+      FILTER c._key == ${data.key}
+      UPDATE c WITH { status: ${data.status} } IN checkup
+      return c
+  `);
+  res.send(keys);
+
+})
+.body(joi.object(updatecheckupSchema).required(), 'edit checkup')
+.response(joi.object(updatecheckupSchema).required(), 'checkup edit')
+.summary('data checkup edit')
+.description('data antrian edit');
+
+
