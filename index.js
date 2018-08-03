@@ -75,7 +75,7 @@ router.get('/checkup_status/:doctor_id/:date', function(req,res){
 router.get('/listuser', function(req,res){
   const keys = db._query(aql`
     FOR entry IN ${foxxColl}
-    RETURN entry._key
+    RETURN entry
   `);
   res.send(keys);
 })
