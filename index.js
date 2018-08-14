@@ -51,7 +51,7 @@ router.get('/checkup/:doctor_id/:date', function (req, res) {
 .description('Assembles a list of keys of entries in the collection.');
 
 // status antrian
-router.get('/checkup_status/:doctor_id/:date', function(req,res){
+router.get('/checkup_status/:doctor_id/:date/:status', function(req,res){
   // const keys = db._query(aql`
   //   FOR entry IN ${checkupColl}
   //   FILTER entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date}
@@ -63,7 +63,7 @@ router.get('/checkup_status/:doctor_id/:date', function(req,res){
     FOR u IN users
     FOR d IN doctors
     SORT entry.que_number ASC
-    FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date}
+    FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date} && entry.status == ${req.pathParams.status}
     RETURN { checkup: entry, users: u , doctors: d}
   `);
   res.send(keys);
