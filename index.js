@@ -58,14 +58,28 @@ router.get('/checkup_status/:doctor_id/:date/:status', function(req,res){
   //   RETURN entry
   // `);
   // res.send(keys);
-  const keys = db._query(aql`
-    FOR entry IN checkup
-    FOR u IN users
-    FOR d IN doctors
-    SORT entry.que_number ASC
-    FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date} && entry.status == ${req.pathParams.status}
-    RETURN { checkup: entry, users: u , doctors: d}
-  `);
+
+  if (req.pathParams.status==="all") {
+     const keys = db._query(aql`
+      FOR entry IN checkup
+      FOR u IN users
+      FOR d IN doctors
+      SORT entry.que_number ASC
+      FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date} }
+      RETURN { checkup: entry, users: u , doctors: d}
+    `);
+  } else {
+     const keys = db._query(aql`
+      FOR entry IN checkup
+      FOR u IN users
+      FOR d IN doctors
+      SORT entry.que_number ASC
+      FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date} && entry.status == ${req.pathParams.status}
+      RETURN { checkup: entry, users: u , doctors: d}
+    `);
+  }
+
+ 
   res.send(keys);
 })
 .response(joi.array().items(joi.string().required()).required(), 'List of keys')
