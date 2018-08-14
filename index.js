@@ -63,8 +63,8 @@ router.get('/checkup_status/:doctor_id/:date', function(req,res){
     FOR u IN users
     FOR d IN doctors
     SORT entry.que_number ASC
-    FILTER u._key == entry.user_id && u._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date}
-    RETURN { checkup: entry, users: u }
+    FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date}
+    RETURN { checkup: entry, users: u , doctors: d}
   `);
   res.send(keys);
 })
