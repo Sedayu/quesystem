@@ -69,6 +69,16 @@ router.get('/checkup_status/:doctor_id/:date/:status', function(req,res){
       RETURN { checkup: entry, users: u , doctors: d}
     `);
      res.send(keys);
+  } else if (req.pathParams.status =="xsudah") {
+     const keys = db._query(aql`
+      FOR entry IN checkup
+      FOR u IN users
+      FOR d IN doctors
+      SORT entry.que_number ASC
+      FILTER u._key == entry.user_id && d._key == entry.doctor_id && entry.doctor_id == ${req.pathParams.doctor_id} && entry.date == ${req.pathParams.date} && entry.status != "sudah"
+      RETURN { checkup: entry, users: u , doctors: d}
+    `);
+     res.send(keys);
   } else {
      const keys = db._query(aql`
       FOR entry IN checkup
