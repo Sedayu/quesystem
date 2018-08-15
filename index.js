@@ -102,6 +102,7 @@ router.get('/checkup_status/:doctor_id/:date/:status', function(req,res){
 router.get('/listuser', function(req,res){
   const keys = db._query(aql`
     FOR entry IN ${foxxColl}
+    SORT entry.display_name
     RETURN entry
   `);
   res.send(keys);
