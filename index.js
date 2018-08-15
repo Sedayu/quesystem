@@ -21,7 +21,7 @@ router.get('/doctors/:key/:value', function (req, res) {
   const keys = db._query(aql`
   	FOR doctor IN doctors
     FILTER doctor.${req.pathParams.key} == ${req.pathParams.value}
-  	SORT doctor.doctor.room
+  	SORT doctor.room
   	RETURN doctor
   `);
   res.send(keys);
