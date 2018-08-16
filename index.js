@@ -203,7 +203,7 @@ router.put('/update_doctor', function(req,res){
   const keys = db._query(aql`
     FOR c IN doctors
       FILTER c._key == ${data.key}
-      UPDATE c WITH { status: ${data.status} } IN doctor
+      UPDATE c WITH { display_name: ${data.display_name},poly: ${data.poly} } IN doctors
       return c
   `);
   res.send(keys);
