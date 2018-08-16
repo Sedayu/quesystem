@@ -132,7 +132,8 @@ router.get('/user/:key', function(req,res){
 // post new user
 const docSchema = {
   "display_name": joi.string().required(),
-  "status": joi.string().required()
+  "status": joi.string().required(),
+  "_key": joi.string().required()
 }
 
 
@@ -190,5 +191,27 @@ router.put('/update_status', function(req,res){
 .response(joi.object(updatecheckupSchema).required(), 'checkup edit')
 .summary('data checkup edit')
 .description('data antrian edit');
+
+const updatedoctorSchema = {
+  "key": joi.string().required(),
+  "display_name": joi.string().required(),
+  "poly": joi.string().required()
+}
+
+router.put('/update_doctor', function(req,res){
+  const data = req.body;
+  const keys = db._query(aql`
+    FOR c IN doctor
+      FILTER c._key == ${data.key}
+      UPDATE c WITH { status: ${data.status} } IN doctor
+      return c
+  `);
+  res.send(keys);
+
+})
+.body(joi.object(updatedoctorSchema).required(), 'edit doctor')
+.response(joi.object(updatedoctorSchema).required(), 'doctor edit')
+.summary('data doctor edit')
+.description('data doctor edit');
 
 
