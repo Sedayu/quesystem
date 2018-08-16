@@ -201,7 +201,7 @@ const updatedoctorSchema = {
 router.put('/update_doctor', function(req,res){
   const data = req.body;
   const keys = db._query(aql`
-    FOR c IN doctor
+    FOR c IN doctors
       FILTER c._key == ${data.key}
       UPDATE c WITH { status: ${data.status} } IN doctor
       return c
