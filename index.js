@@ -178,10 +178,17 @@ const updatecheckupSchema = {
 
 router.put('/update_status', function(req,res){
   const data = req.body;
+
+  if (data.status="sedang") {
+    data.call_status = "panggil";
+  } else {
+    data.call_status = "sudah_panggil";
+  }
+
   const keys = db._query(aql`
     FOR c IN checkup
       FILTER c._key == ${data.key}
-      UPDATE c WITH { status: ${data.status} } IN checkup
+      UPDATE c WITH { status: ${data.status}, call_status: ${data.call_status} } IN checkup
       return c
   `);
   res.send(keys);
