@@ -181,6 +181,9 @@ router.put('/update_status', function(req,res){
 
   if (data.status=="sedang") {
     data.call_status = "panggil";
+  } else if (data.status=="sudah_panggil") {
+    data.status=="sedang";
+    data.call_status = "sudah_panggil";
   } else {
     data.call_status = "sudah_panggil";
   }
