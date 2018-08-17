@@ -179,7 +179,7 @@ const updatecheckupSchema = {
 router.put('/update_status', function(req,res){
   const data = req.body;
 
-  if (data.status="sedang") {
+  if (data.status=="sedang") {
     data.call_status = "panggil";
   } else {
     data.call_status = "sudah_panggil";
