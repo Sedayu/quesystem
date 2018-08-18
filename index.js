@@ -173,20 +173,21 @@ router.post('/checkup', function(req,res){
 
 const updatecheckupSchema = {
   "key": joi.string().required(),
-  "status": joi.string().required()
+  "status": joi.string().required(),
+  "call_status": joi.string().required()
 }
 
 router.put('/update_status', function(req,res){
   const data = req.body;
 
-  if (data.status=="sedang") {
-    data.call_status = "panggil";
-  } else if (data.status=="sudah_panggil") {
-    data.status=="sedang";
-    data.call_status = "sudah_panggil";
-  } else {
-    data.call_status = "sudah_panggil";
-  }
+  // if (data.status=="sedang") {
+  //   data.call_status = "panggil";
+  // } else if (data.status=="sudah_panggil") {
+  //   data.status=="sedang";
+  //   data.call_status = "sudah_panggil";
+  // } else {
+  //   data.call_status = "sudah_panggil";
+  // }
 
   const keys = db._query(aql`
     FOR c IN checkup
